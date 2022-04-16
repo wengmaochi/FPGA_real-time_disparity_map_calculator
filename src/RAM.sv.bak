@@ -1,0 +1,414 @@
+module RAM(
+    input         	    p_clk,
+    input         	    rst_n,
+    input         	    i_start,
+    input   [7:0] 	    i_left_image,
+    input   [7:0] 	    i_right_image,
+    output  [72-1:0] 	vector_l_1,
+    output  [72-1:0] 	vector_l_2,
+    output  [72-1:0] 	vector_l_3,
+    output  [72-1:0] 	vector_l_4,
+    output  [72-1:0] 	vector_l_5,
+    output  [72-1:0] 	vector_l_6,
+    output  [72-1:0] 	vector_l_7,
+    output  [72-1:0] 	vector_l_8,
+    output  [72-1:0] 	vector_l_9,
+    output  [72-1:0] 	vector_r_1,
+    output  [72-1:0] 	vector_r_2,
+    output  [72-1:0] 	vector_r_3,
+    output  [72-1:0] 	vector_r_4,
+    output  [72-1:0] 	vector_r_5,
+    output  [72-1:0] 	vector_r_6,
+    output  [72-1:0] 	vector_r_7,
+    output  [72-1:0] 	vector_r_8,
+    output  [72-1:0] 	vector_r_9  
+    output  [7:0] 	o_vector_l_1,
+    output  [7:0] 	o_vector_l_2,
+    output  [7:0] 	o_vector_l_3,
+    output  [7:0] 	o_vector_l_4,
+    output  [7:0] 	o_vector_l_5,
+    output  [7:0] 	o_vector_l_6,
+    output  [7:0] 	o_vector_l_7,
+    output  [7:0] 	o_vector_l_8,
+    output  [7:0] 	o_vector_l_9,
+    output  [7:0] 	o_vector_r_1,
+    output  [7:0] 	o_vector_r_2,
+    output  [7:0] 	o_vector_r_3,
+    output  [7:0] 	o_vector_r_4,
+    output  [7:0] 	o_vector_r_5,
+    output  [7:0] 	o_vector_r_6,
+    output  [7:0] 	o_vector_r_7,
+    output  [7:0] 	o_vector_r_8,
+    output  [7:0] 	o_vector_r_9  
+);
+logic start_w, start_r ,aclr;
+logic [7:0] left_image_w , left_image_r;
+logic [7:0] right_image_w, right_image_r;
+logic [7:0] line_l_1, line_r_1;
+logic [7:0] line_l_2, line_r_2;
+logic [7:0] line_l_3, line_r_3;
+logic [7:0] line_l_4, line_r_4;
+logic [7:0] line_l_5, line_r_5;
+logic [7:0] line_l_6, line_r_6;
+logic [7:0] line_l_7, line_r_7;
+logic [7:0] line_l_8, line_r_8;
+logic [7:0] line_l_9, line_r_9;
+// logic [7:0] vector_l_1, vector_r_1;
+// logic [7:0] vector_l_2, vector_r_2;
+// logic [7:0] vector_l_3, vector_r_3;
+// logic [7:0] vector_l_4, vector_r_4;
+// logic [7:0] vector_l_5, vector_r_5;
+// logic [7:0] vector_l_6, vector_r_6;
+// logic [7:0] vector_l_7, vector_r_7;
+// logic [7:0] vector_l_8, vector_r_8;
+// logic [7:0] vector_l_9, vector_r_9;
+assign aclr = 1'b0;
+assign left_image_w = i_left_image;
+assign right_image_w = i_right_image;
+assign start_w = i_start;
+assign o_vector_l_1 = line_l_1;
+assign o_vector_r_1 = line_r_1;
+assign o_vector_l_2 = line_l_2;
+assign o_vector_r_2 = line_r_2;
+assign o_vector_l_3 = line_l_3;
+assign o_vector_r_3 = line_r_3;
+assign o_vector_l_4 = line_l_4;
+assign o_vector_r_4 = line_r_4;
+assign o_vector_l_5 = line_l_5;
+assign o_vector_r_5 = line_r_5;
+assign o_vector_l_6 = line_l_6;
+assign o_vector_r_6 = line_r_6;
+assign o_vector_l_7 = line_l_7;
+assign o_vector_r_7 = line_r_7;
+assign o_vector_l_8 = line_l_8;
+assign o_vector_r_8 = line_r_8;
+assign o_vector_l_9 = line_l_9;
+assign o_vector_r_9 = line_r_9;
+
+RAM_shift left_ram(
+	.aclr(aclr),
+	.clken(start_r),
+	.clock(p_clk),
+	.shiftin(left_image_r),
+	.shiftout(),
+	.taps0x(line_l_1),
+	.taps1x(line_l_2),
+	.taps2x(line_l_3),
+	.taps3x(line_l_4),
+	.taps4x(line_l_5),
+	.taps5x(line_l_6),
+	.taps6x(line_l_7),
+	.taps7x(line_l_8),
+	.taps8x(line_l_9)
+);
+RAM_shift right_ram(
+	.aclr(aclr),
+	.clken(start_r),
+	.clock(p_clk),
+	.shiftin(right_image_r),
+	.shiftout(),
+	.taps0x(line_r_1),
+	.taps1x(line_r_2),
+	.taps2x(line_r_3),
+	.taps3x(line_r_4),
+	.taps4x(line_r_5),                                                                                          
+	.taps5x(line_r_6),
+	.taps6x(line_r_7),
+	.taps7x(line_r_8),
+	.taps8x(line_r_9)
+);
+
+
+SIPO_vector v_l_1(
+	.clk(p_clk),
+	// .rst_n(),
+	.en(start_r),
+	.i_line(line_l_1),
+	.o_vector(vector_l_1)
+);
+SIPO_vector v_l_2(
+	.clk(p_clk),
+	// .rst_n(),
+	.en(start_r),
+	.i_line(line_l_2),
+	.o_vector(vector_l_2)
+);
+SIPO_vector v_l_3(
+	.clk(p_clk),
+	// .rst_n(),
+	.en(start_r),
+	.i_line(line_l_3),
+	.o_vector(vector_l_3)
+);
+SIPO_vector v_l_4(
+	.clk(p_clk),
+	// .rst_n(),
+	.en(start_r),
+	.i_line(line_l_4),
+	.o_vector(vector_l_4)
+);
+SIPO_vector v_l_5(
+	.clk(p_clk),
+	// .rst_n(),
+	.en(start_r),
+	.i_line(line_l_5),
+	.o_vector(vector_l_5)
+);
+SIPO_vector v_l_6(
+	.clk(p_clk),
+	// .rst_n(),
+	.en(start_r),
+	.i_line(line_l_6),
+	.o_vector(vector_l_6)
+);
+SIPO_vector v_l_7(
+	.clk(p_clk),
+	// .rst_n(),
+	.en(start_r),
+	.i_line(line_l_7),
+	.o_vector(vector_l_7)
+);
+SIPO_vector v_l_8(
+	.clk(p_clk),
+	// .rst_n(),
+	.en(start_r),
+	.i_line(line_l_8),
+	.o_vector(vector_l_8)
+);
+SIPO_vector v_l_9(
+	.clk(p_clk),
+	// .rst_n(),
+	.en(start_r),
+	.i_line(line_l_9),
+	.o_vector(vector_l_9)
+);
+SIPO_vector v_r_1(
+	.clk(p_clk),
+	// .rst_n(),
+	.en(start_r),
+	.i_line(line_r_1),
+	.o_vector(vector_r_1)
+);
+SIPO_vector v_r_2(
+	.clk(p_clk),
+	// .rst_n(),
+	.en(start_r),
+	.i_line(line_r_2),
+	.o_vector(vector_r_2)
+);
+
+SIPO_vector v_r_3(
+	.clk(p_clk),
+	// .rst_n(),
+	.en(start_r),
+	.i_line(line_r_3),
+	.o_vector(vector_r_3)
+);
+
+SIPO_vector v_r_4(
+	.clk(p_clk),
+	// .rst_n(),
+	.en(start_r),
+	.i_line(line_r_4),
+	.o_vector(vector_r_4)
+);
+
+SIPO_vector v_r_5(
+	.clk(p_clk),
+	// .rst_n(),
+	.en(start_r),
+	.i_line(line_r_5),
+	.o_vector(vector_r_5)
+);
+
+SIPO_vector v_r_6(
+	.clk(p_clk),
+	// .rst_n(),
+	.en(start_r),
+	.i_line(line_r_6),
+	.o_vector(vector_r_6)
+);
+
+
+SIPO_vector v_r_7(
+	.clk(p_clk),
+	// .rst_n(),
+	.en(start_r),
+	.i_line(line_r_7),
+	.o_vector(vector_r_7)
+);
+
+SIPO_vector v_r_8(
+	.clk(p_clk),
+	// .rst_n(),
+	.en(start_r),
+	.i_line(line_r_8),
+	.o_vector(vector_r_8)
+);
+SIPO_vector v_r_9(
+	.clk(p_clk),
+	// .rst_n(),
+	.en(start_r),
+	.i_line(line_r_9),
+	.o_vector(vector_r_9)
+);
+
+
+always @( posedge p_clk or negedge rst_n) begin
+    if(!rst_n) begin
+        left_image_r  <= '0;
+        right_image_r <= '0;
+        start_r <= '0;
+    end
+    else begin
+        left_image_r <= left_image_w;
+        right_image_r <= right_image_w;
+        start_r <= start_w;
+    end
+end
+endmodule
+
+// store_vector left_stvec1(
+// 	.aclr(aclr),
+// 	.clken(start_r),
+// 	.clock(p_clk),
+// 	.shiftin(line_l_1),
+// 	.shiftout(vector_l_1),
+// 	.taps()
+// );
+// store_vector left_stvec2(
+// 	.aclr(aclr),
+// 	.clken(start_r),
+// 	.clock(p_clk),
+// 	.shiftin(line_l_2),
+// 	.shiftout(vector_l_2),
+// 	.taps()
+// );
+// store_vector left_stvec3(
+// 	.aclr(aclr),
+// 	.clken(start_r),
+// 	.clock(p_clk),
+// 	.shiftin(line_l_3),
+// 	.shiftout(vector_l_3),
+// 	.taps()
+// );
+// store_vector left_stvec4(
+// 	.aclr(aclr),
+// 	.clken(start_r),
+// 	.clock(p_clk),
+// 	.shiftin(line_l_4),
+// 	.shiftout(vector_l_4),
+// 	.taps()
+// );
+// store_vector left_stvec5(
+// 	.aclr(aclr),
+// 	.clken(start_r),
+// 	.clock(p_clk),
+// 	.shiftin(line_l_5),
+// 	.shiftout(vector_l_5),
+// 	.taps()
+// );
+// store_vector left_stvec6(
+// 	.aclr(aclr),
+// 	.clken(start_r),
+// 	.clock(p_clk),
+// 	.shiftin(line_l_6),
+// 	.shiftout(vector_l_6),
+// 	.taps()
+// );
+// store_vector left_stvec7(
+// 	.aclr(aclr),
+// 	.clken(start_r),
+// 	.clock(p_clk),
+// 	.shiftin(line_l_7),
+// 	.shiftout(vector_l_7),
+// 	.taps()
+// );
+// store_vector left_stvec8(
+// 	.aclr(aclr),
+// 	.clken(start_r),
+// 	.clock(p_clk),
+// 	.shiftin(line_l_8),
+// 	.shiftout(vector_l_8),
+// 	.taps()
+// );
+// store_vector left_stvec9(
+// 	.aclr(aclr),
+// 	.clken(start_r),
+// 	.clock(p_clk),
+// 	.shiftin(line_l_9),
+// 	.shiftout(vector_l_9),
+// 	.taps()
+// );
+// store_vector right_stvec1(
+// 	.aclr(aclr),
+// 	.clken(start_r),
+// 	.clock(p_clk),
+// 	.shiftin(line_r_1),
+// 	.shiftout(vector_r_1),
+// 	.taps()
+// );
+// store_vector right_stvec2(
+// 	.aclr(aclr),
+// 	.clken(start_r),
+// 	.clock(p_clk),
+// 	.shiftin(line_r_2),
+// 	.shiftout(vector_r_2),
+// 	.taps()
+// );
+// store_vector right_stvec3(
+// 	.aclr(aclr),
+// 	.clken(start_r),
+// 	.clock(p_clk),
+// 	.shiftin(line_r_3),
+// 	.shiftout(vector_r_3),
+// 	.taps()
+// );
+// store_vector right_stvec4(
+// 	.aclr(aclr),
+// 	.clken(start_r),
+// 	.clock(p_clk),
+// 	.shiftin(line_r_4),
+// 	.shiftout(vector_r_4),
+// 	.taps()
+// );
+// store_vector right_stvec5(
+// 	.aclr(aclr),
+// 	.clken(start_r),
+// 	.clock(p_clk),
+// 	.shiftin(line_r_5),
+// 	.shiftout(vector_r_5),
+// 	.taps()
+// );
+// store_vector right_stvec6(
+// 	.aclr(aclr),
+// 	.clken(start_r),
+// 	.clock(p_clk),
+// 	.shiftin(line_r_6),
+// 	.shiftout(vector_r_6),
+// 	.taps()
+// );
+// store_vector right_stvec7(
+// 	.aclr(aclr),
+// 	.clken(start_r),
+// 	.clock(p_clk),
+// 	.shiftin(line_r_7),
+// 	.shiftout(vector_r_7),
+// 	.taps()
+// );
+// store_vector right_stvec8(
+// 	.aclr(aclr),
+// 	.clken(start_r),
+// 	.clock(p_clk),
+// 	.shiftin(line_r_8),
+// 	.shiftout(vector_r_8),
+// 	.taps()
+// );
+// store_vector right_stvec9(
+// 	.aclr(aclr),
+// 	.clken(start_r),
+// 	.clock(p_clk),
+// 	.shiftin(line_l_9),
+// 	.shiftout(vector_r_9),
+// 	.taps()
+// );

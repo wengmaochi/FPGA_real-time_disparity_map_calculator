@@ -1,0 +1,174 @@
+module tb_ram(
+    input                 clk,
+    input                 rst_n
+    input                 KEY3,
+    input                 KEY2,
+    input                 KEY1,
+    input       [17:0]    SW,
+    output      [6:0]     o_SEG1,
+    output      [6:0]     o_SEG2,
+    output      [6:0]     o_SEG3,
+    output      [6:0]     o_SEG4,
+    output      [6:0]     o_SEG5,
+    output      [6:0]     o_SEG6,
+    output      [6:0]     o_SEG7,
+    output      [6:0]     o_SEG8,
+);
+logic   [7:0]    vector_r_9;
+logic   [7:0]    vector_r_8;
+logic   [7:0]    vector_r_7;
+logic   [7:0]    vector_r_6;
+logic   [7:0]    vector_r_5;
+logic   [7:0]    vector_r_4;
+logic   [7:0]    vector_r_3;
+logic   [7:0]    vector_r_2;
+logic   [7:0]    vector_r_1;
+logic   [7:0]    vector_l_9;
+logic   [7:0]    vector_l_8;
+logic   [7:0]    vector_l_7;
+logic   [7:0]    vector_l_6;
+logic   [7:0]    vector_l_5;
+logic   [7:0]    vector_l_4;
+logic   [7:0]    vector_l_3;
+logic   [7:0]    vector_l_2;
+logic   [7:0]    vector_l_1;
+logic   [20:0]   counter_left_w, counter_left_r, counter_right_w, counter_right_r;
+logic            start_w, start_r;
+logic   [2:0]    state_w, start_r;
+logic   [3:0]    display1, display2, display3, display4;
+RAM rammm(
+    .p_clk(clk),
+    .rst_n(rst_n),
+    .start(start_r),
+    .i_left_image(counter_left_r),
+    .i_right_image(counter_right_r),
+    .vector_l_1(vector_l_1),
+    .vector_l_2(vector_l_2),
+    .vector_l_3(vector_l_3),
+    .vector_l_4(vector_l_4),
+    .vector_l_5(vector_l_5),
+    .vector_l_6(vector_l_6),
+    .vector_l_7(vector_l_7),
+    .vector_l_8(vector_l_8),
+    .vector_l_9(vector_l_9),
+    .vector_r_1(vector_l_1),
+    .vector_r_2(vector_l_2),
+    .vector_r_3(vector_l_3),
+    .vector_r_4(vector_l_4),
+    .vector_r_5(vector_l_5),
+    .vector_r_6(vector_l_6),
+    .vector_r_7(vector_l_7),
+    .vector_r_8(vector_l_8),
+    .vector_r_9(vector_l_9),
+);
+
+
+always_comb begin 
+    state_w = state_r;
+    start_w = start_r;
+    case(state_r) begin
+        3'd0 : begin
+            state_w = state_r;
+            start_w = 0;
+            counter_left_w = 21'b0;
+            counter_right_w = 21'b0;
+            if(KEY2) begin
+                state_w = 3'd1;
+                start_w = 1'b1;
+                counter_right_w = 21'd640;
+            end
+        end
+        3'd1 : begin
+            state_w = state_r;
+            start_w = start_r;
+            counter_left_w = counter_left_r + 1;
+            counter_right_w = counter_right_r + 1;
+            if(counter_right_r == 21'd5760)begin
+                state_w = 3'd2;
+                start_w = 1'b0;
+                counter_left_w = counter_left_r;
+                counter_right_w = counter_right_r;
+            end
+        end
+        3'd2 : begin
+            state_w = state_r;
+            start_w = start_r;
+            if( KEY2 ) begin
+                start_w = 1'b1;
+                counter_left_w  = counter_left_r + 21'b1;
+                counter_right_w = counter_right_r + 21'b1;
+            end
+            else begin
+                start_w = 1'b0;
+                counter_right_w = counter_right_r;
+                counter_left_w  = counter_left_r;
+            end
+        end
+    endcase
+end
+logic [3:0] SW_num = SW[3:0];
+always_comb begin 
+    case (SW_num) begin
+        4'd1 : begin display1 = vector_l_1[3:0]; display2=vector_l_1[7:4]; display3=vector_r_1[3:0]; display4=vector_r_1[7:4] end
+        4'd2 : begin display1 = vector_l_2[3:0]; display2=vector_l_2[7:4]; display3=vector_r_2[3:0]; display4=vector_r_2[7:4] end
+        4'd3 : begin display1 = vector_l_3[3:0]; display2=vector_l_3[7:4]; display3=vector_r_3[3:0]; display4=vector_r_3[7:4] end
+        4'd4 : begin display1 = vector_l_4[3:0]; display2=vector_l_4[7:4]; display3=vector_r_4[3:0]; display4=vector_r_4[7:4] end
+        4'd5 : begin display1 = vector_l_5[3:0]; display2=vector_l_5[7:4]; display3=vector_r_5[3:0]; display4=vector_r_5[7:4] end
+        4'd6 : begin display1 = vector_l_6[3:0]; display2=vector_l_6[7:4]; display3=vector_r_6[3:0]; display4=vector_r_6[7:4] end
+        4'd7 : begin display1 = vector_l_7[3:0]; display2=vector_l_7[7:4]; display3=vector_r_7[3:0]; display4=vector_r_7[7:4] end
+        4'd8 : begin display1 = vector_l_8[3:0]; display2=vector_l_8[7:4]; display3=vector_r_8[3:0]; display4=vector_r_8[7:4] end
+        4'd9 : begin display1 = vector_l_9[3:0]; display2=vector_l_9[7:4]; display3=vector_r_9[3:0]; display4=vector_r_9[7:4] end
+        4'd0 : begin display1 = '0; display2='0; display3='0; display4= '0 end
+        default : begin display1 = '0; display2='0; display3='0; display4= '0 end
+    endcase
+end
+
+
+SEG7_LUT1 u1 (
+    .iSEG({1'b0,state_r}),
+    .oSEG(o_SEG0)
+);
+SEG7_LUT1 u2 (
+    .iSEG({3'b0,start_r}),
+    .oSEG(o_SEG1)
+);
+SEG7_LUT1 u3 (
+    .iSEG(display1),
+    .oSEG(o_SEG2)
+);
+SEG7_LUT1 u4 (
+    .iSEG(display2),
+    .oSEG(o_SEG3)
+);
+SEG7_LUT1 u5 (
+    .iSEG(display3),
+    .oSEG(o_SEG4)
+);
+SEG7_LUT1 u6 (
+    .iSEG(display4),
+    .oSEG(o_SEG5)
+);
+SEG7_LUT1 u7 (
+    .iSEG(),
+    .oSEG(o_SEG6)
+);
+SEG7_LUT1 u8 (
+    .iSEG(),
+    .oSEG(o_SEG7)
+);
+always_ff @( posedge clk or posedge rst_n ) begin : blockName
+    if(rst_n) begin
+        start_r <= '0;
+        state_r <= '0;
+        counter_right_r <= '0;
+        counter_left_r  <= '0;
+    end
+    else begin
+        counter_right_r <= counter_right_w;
+        counter_left_r  <= counter_left_w;
+        start_r <= start_w;
+        state_r <= state_w;
+    end
+end
+
+endmodule

@@ -1,0 +1,68 @@
+module SIPO_vector(
+    input           clk,
+    // input           rst_n,
+    input           en,
+    input   [7:0]   i_line,
+    output  [8*9-1] o_vector
+);
+
+logic [8:0] q0, q1, q2, q3, q4, q5, q6, q7;
+assign o_vector[7 :0]  = {q7[0], q6[0] ,q5[0], q4[0], q3[0], q2[0], q1[0], q0[0]};
+assign o_vector[15:8]  = {q7[1], q6[1] ,q5[1], q4[1], q3[1], q2[1], q1[1], q0[1]};
+assign o_vector[23:16] = {q7[2], q6[2] ,q5[2], q4[2], q3[2], q2[2], q1[2], q0[2]};
+assign o_vector[31:24] = {q7[3], q6[3] ,q5[3], q4[3], q3[3], q2[3], q1[3], q0[3]};
+assign o_vector[39:32] = {q7[4], q6[4] ,q5[4], q4[4], q3[4], q2[4], q1[4], q0[4]};
+assign o_vector[47:40] = {q7[5], q6[5] ,q5[5], q4[5], q3[5], q2[5], q1[5], q0[5]};
+assign o_vector[55:48] = {q7[6], q6[6] ,q5[6], q4[6], q3[6], q2[6], q1[6], q0[6]};
+assign o_vector[63:56] = {q7[7], q6[7] ,q5[7], q4[7], q3[7], q2[7], q1[7], q0[7]};
+assign o_vector[71:64] = {q7[8], q6[8] ,q5[8], q4[8], q3[8], q2[8], q1[8], q0[8]};
+sipo bit0(
+	.clock(p_clk),
+	.enable(en),
+	.shiftin(i_line[0]),
+	.q(q0),
+);
+sipo bit1(
+	.clock(p_clk),
+	.enable(en),
+	.shiftin(i_line[1]),
+	.q(q1),
+);
+sipo bit2(
+	.clock(p_clk),
+	.enable(en),
+	.shiftin(i_line[2]),
+	.q(q2),
+);
+sipo bit3(
+	.clock(p_clk),
+	.enable(en),
+	.shiftin(i_line[3]),
+	.q(q3),
+);
+sipo bit4(
+	.clock(p_clk),
+	.enable(en),
+	.shiftin(i_line[4]),
+	.q(q4),
+);
+sipo bit5(
+	.clock(p_clk),
+	.enable(en),
+	.shiftin(i_line[5]),
+	.q(q5),
+);
+sipo bit6(
+	.clock(p_clk),
+	.enable(en),
+	.shiftin(i_line[6]),
+	.q(q6),
+);
+sipo bit7(
+	.clock(p_clk),
+	.enable(en),
+	.shiftin(i_line[7]),
+	.q(q7),
+);
+
+endmodule
